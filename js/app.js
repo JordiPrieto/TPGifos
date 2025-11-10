@@ -33,6 +33,7 @@ function initTheme() {
     const saved = localStorage.getItem('gifos:theme') || 'light';
     document.body.classList.toggle('dark', saved === 'dark');
 }
+
 themeBtn.addEventListener('click', () => {
     document.body.classList.toggle('dark');
     localStorage.setItem(
@@ -40,6 +41,7 @@ themeBtn.addEventListener('click', () => {
     document.body.classList.contains('dark') ? 'dark' : 'light'
     );
 });
+
 initTheme();
 
 // ========================================================
@@ -47,23 +49,23 @@ initTheme();
 // ========================================================
 async function searchGifs(query, limit = 24) {
     try {
-    gallery.innerHTML = '<p style="grid-column:1/-1">Buscando...</p>';
-    const res = await fetch(`${SEARCH_URL}?api_key=${API_KEY}&q=${encodeURIComponent(query)}&limit=${limit}`);
-    const data = await res.json();
+        gallery.innerHTML = '<p style="grid-column:1/-1">Buscando...</p>';
+        const res = await fetch(`${SEARCH_URL}?api_key=${API_KEY}&q=${encodeURIComponent(query)}&limit=${limit}`);
+        const data = await res.json();
 
-    // 🔹 Guardar resultados en localStorage
-    localStorage.setItem('gifos:lastSearch', JSON.stringify(data.data));
+        // Guardar última búsqueda
+        localStorage.setItem('gifos:lastSearch', JSON.stringify(data.data));
 
     renderGifs(data.data);
     } catch (e) {
-    gallery.innerHTML = `<p style="color:tomato">Error: ${e.message}</p>`;
+        gallery.innerHTML = `<p style="color:tomato">Error: ${e.message}</p>`;
     }
 }
 
 function loadLastSearch() {
     const stored = localStorage.getItem('gifos:lastSearch');
     if (!stored) {
-    gallery.innerHTML = '<p>No hay búsquedas recientes.</p>';
+        gallery.innerHTML = '<p>No hay búsquedas recientes.</p>';
     return;
     }
     const gifs = JSON.parse(stored);
@@ -72,31 +74,58 @@ function loadLastSearch() {
 
 document.querySelectorAll('a[href="#gallery"]').forEach(link => {
     link.addEventListener('click', e => {
-    e.preventDefault();
-    loadLastSearch();
-    document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
+        e.preventDefault();
+        loadLastSearch();
+        document.getElementById('gallery').scrollIntoView({ behavior: 'smooth' });
     });
 });
 
-
+// ========================================================
+// ============= MOSTRAR Y GUARDAR GIFs ===================
+// ========================================================
 function renderGifs(items) {
     if (!items || items.length === 0) {
-    gallery.innerHTML = '<p style="grid-column:1/-1">No se encontraron resultados.</p>';
+        gallery.innerHTML = '<p style="grid-column:1/-1">No se encontraron resultados.</p>';
     return;
     }
+
     gallery.innerHTML = '';
     items.forEach(it => {
-    const url = it.images?.downsized_medium?.url || it.images?.original?.url;
-    const card = document.createElement('article');
-    card.className = 'card';
-    card.innerHTML = `
+        const url = it.images?.downsized_medium?.url || it.images?.original?.url;
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.innerHTML = `
         <img loading="lazy" src="${url}" alt="${it.title || 'gif'}">
         <div class="meta">
-        <span>${(it.title || '—').slice(0, 20)}</span>
-        <button data-gif='${encodeURIComponent(url)}'>Guardar</button>
+            <span>${(it.title || '—').slice(0, 20)}</span>
+            <button class="save-btn" data-url="${encodeURIComponent(url)}">💾 Guardar</button>
         </div>`;
     gallery.appendChild(card);
     });
+
+  // Activar botones de guardado
+    document.querySelectorAll('.save-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+        const gifUrl = decodeURIComponent(e.target.dataset.url);
+        saveGifToLocal(gifUrl);
+    });
+    });
+}
+
+// Guardar GIF en localStorage
+function saveGifToLocal(url) {
+    const key = 'gifos:saved';
+    const saved = JSON.parse(localStorage.getItem(key) || '[]');
+
+  // Evitar duplicados
+    if (saved.some(g => g.url === url)) {
+    showToast('⚠️ Este GIF ya está guardado');
+    return;
+    }
+
+    saved.unshift({ url, savedAt: new Date().toISOString() });
+    localStorage.setItem(key, JSON.stringify(saved));
+    showToast('💾 GIF guardado en Mis GIFs');
 }
 
 // ========================================================
@@ -104,8 +133,9 @@ function renderGifs(items) {
 searchBtn.addEventListener('click', () => {
     const q = qInput.value.trim();
     if (!q) return;
-    searchGifs(q, parseInt(limitSelect.value, 10));
+        searchGifs(q, parseInt(limitSelect.value, 10));
 });
+
 qInput.addEventListener('keydown', e => e.key === 'Enter' && searchBtn.click());
 
 // --- Botones recomendados ---
@@ -118,16 +148,15 @@ recBtns.forEach(btn =>
 
 // ========================================================
 // ================== GRABADORA ===========================
-// ========================================================
 async function startCamera() {
-    if (mediaStream) return;
-    try {
+  if (mediaStream) return;
+  try {
     mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
     preview.srcObject = mediaStream;
-    } catch (err) {
+  } catch (err) {
     console.error('Error al acceder a la cámara', err);
     uploadStatus.textContent = 'Acceso a cámara denegado';
-    }
+  }
 }
 
 function stopCamera() {
@@ -138,8 +167,6 @@ function stopCamera() {
     }
 }
 
-
-
 function resetTimer() {
     clearInterval(timerInterval);
     secondsElapsed = 0;
@@ -147,7 +174,7 @@ function resetTimer() {
 }
 
 function startTimer() {
-  resetTimer(); // 🔹 asegúrate de empezar limpio
+    resetTimer();
     timerInterval = setInterval(() => {
     secondsElapsed++;
     const m = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
@@ -162,11 +189,10 @@ function stopTimer() {
 
 startRec.addEventListener('click', async () => {
     await startCamera();
-    resetTimer(); // 🔹 reinicia SIEMPRE antes de grabar
+    resetTimer();
     recorder = RecordRTC(mediaStream, { type: 'gif', frameRate: 6, quality: 10, width: 360 });
     recorder.startRecording();
-
- startTimer(); // 🔹 arranca el cronómetro
+    startTimer();
     startRec.disabled = true;
     stopRec.disabled = false;
     uploadRec.disabled = true;
@@ -174,12 +200,11 @@ startRec.addEventListener('click', async () => {
 });
 
 stopRec.addEventListener('click', () => {
-  stopTimer(); // 🔹 detenemos el tiempo inmediatamente
-
+    stopTimer();
     if (!recorder) return;
         recorder.stopRecording(() => {
         recordedBlob = recorder.getBlob();
-        resetTimer(); // 🔹 vuelve a 00:00 tras detener
+        resetTimer();
         stopCamera();
         startRec.disabled = false;
         stopRec.disabled = true;
@@ -190,16 +215,13 @@ stopRec.addEventListener('click', () => {
     });
 });
 
-
-
 uploadRec.addEventListener('click', async () => {
     if (!recordedBlob) {
-    uploadStatus.textContent = 'No hay GIF para subir.';
+        uploadStatus.textContent = 'No hay GIF para subir.';
     return;
     }
 
     uploadStatus.textContent = '⬆️ Subiendo a Giphy...';
-
     try {
     const form = new FormData();
     form.append('file', recordedBlob, 'miGif.gif');
@@ -213,18 +235,15 @@ uploadRec.addEventListener('click', async () => {
         const gifUrl = gifJson.data?.images?.downsized_medium?.url;
 
         if (gifUrl) {
-        const key = 'gifos:saved';
-        const arr = JSON.parse(localStorage.getItem(key) || '[]');
-        arr.unshift({ url: gifUrl, savedAt: new Date().toISOString() });
-        localStorage.setItem(key, JSON.stringify(arr.slice(0, 100)));
+        saveGifToLocal(gifUrl);
         }
 
         uploadStatus.textContent = `✅ GIF subido y guardado (ID: ${gifId})`;
         showToast('🎉 GIF subido y guardado en Mis GIFs');
     } else {
         uploadStatus.textContent = 'Subida completada (sin ID)';
-    }
-    } catch (e) {
+        }
+ } catch (e) {
     uploadStatus.textContent = '❌ Error subiendo GIF: ' + e.message;
     }
 
@@ -245,6 +264,9 @@ function showToast(msg) {
     setTimeout(() => toast.remove(), 400);
     }, 2500);
 }
+
+// ========================================================
+// ============== CARGAR MIS GIFS =========================
 function loadMyGifs() {
     const cont = document.getElementById('myGifsContainer');
     if (!cont) return;
@@ -258,29 +280,26 @@ function loadMyGifs() {
     }
 
     gifs.forEach(g => {
-        const img = document.createElement('img');
-        img.src = g.url;
-        img.alt = 'Mi GIF subido';
+    const img = document.createElement('img');
+    img.src = g.url;
+    img.alt = 'Mi GIF subido';
     cont.appendChild(img);
     });
 }
-
-
-// Cargar automáticamente al abrir index.html
-//window.addEventListener('DOMContentLoaded', loadMyGifs);
 
 // ========================================================
 // ================== INICIAL =============================
 (async () => {
     await searchGifs('memes', 24);
 })();
+
 // ====== Mostrar solo Mis GIFs cuando se hace clic ======
 const myGifsLink = document.getElementById('myGifsLink');
 if (myGifsLink) {
     myGifsLink.addEventListener('click', e => {
     e.preventDefault();
-    gallery.innerHTML = ''; // limpiar galería de búsqueda
+    gallery.innerHTML = '';
     document.getElementById('myGifs').scrollIntoView({ behavior: 'smooth' });
-    loadMyGifs(); // cargar los tuyos recién ahora
+    loadMyGifs();
     });
 }
