@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>gifOS - Buscador y Grabador de GIFs</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.6.1/RecordRTC.js"></script>
+</head>
+<body>
+    <header>
+    <div class="brand">
+        <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="var(--accent)"></rect>
+        <text x="6" y="17" fill="white" font-weight="700" font-size="12">GIF</text>
+        </svg>
+        <h1>gifOS</h1>
+    </div>
+
+    <nav class="nav">
+        <a href="#home">Inicio</a>
+        <a href="#gallery">Galería</a>
+        <a href="#myGifs" id="myGifsLink">Mis GIFs</a>
+        <a href="#recorder">Crear GIF</a>
+
+        <button id="themeToggle" class="theme-btn">Cambiar tema</button>
+    </nav>
+    </header>
+
+    <main id="home">
+    <!-- 🔍 Búsqueda -->
+    <section class="search-row">
+        <h2 class="visually-hidden">Buscador de GIFs</h2>
+        <input id="searchInput" type="text" placeholder="Buscar GIFs (ej: gatos, memes)">
+        <button id="searchBtn">Buscar</button>
+        <select id="limit" title="Resultados por página">
+        <option value="12">12</option>
+        <option value="24" selected>24</option>
+        <option value="48">48</option>
+        </select>
+    </section>
+
+    <!-- 💡 Recomendados -->
+    <section class="recommended">
+        <h2 class="visually-hidden">Recomendados</h2>
+        <button class="rec-btn" data-term="perros">🐶 Perros</button>
+        <button class="rec-btn" data-term="reacciones">😂 Reacciones</button>
+        <button class="rec-btn" data-term="naturaleza">🌿 Naturaleza</button>
+        <button class="rec-btn" data-term="bailes">💃 Bailes</button>
+    </section>
+
+    <!-- 🎥 Grabador -->
+    <section id="recorder" class="recorder">
+        <div>
+        <video id="preview" autoplay muted playsinline></video>
+        <div class="rec-buttons">
+            <button id="startRec">Grabar GIF</button>
+            <button id="stopRec" disabled>Detener</button>
+            <button id="uploadRec" disabled>Subir</button>
+        </div>
+        <div class="timer" id="recTimer">00:00</div>
+        </div>
+        <div class="rec-info">
+        <h3>Cómo usar</h3>
+        <ol>
+            <li>Presiona <b>Grabar GIF</b> para abrir la cámara.</li>
+            <li>Luego <b>Detener</b> para finalizar la grabación.</li>
+            <li>Finalmente <b>Subir</b> para enviarlo a Giphy.</li>
+        </ol>
+        <p id="uploadStatus" class="status"></p>
+        </div>
+    </section>
+
+    <!-- 🖼️ Galería -->
+    <section id="gallery" class="gallery" aria-live="polite">
+        <h2 class="visually-hidden">Galería de resultados</h2>
+    </section>
+
+    <!-- 🖼️ Mis GIFs -->
+    <section id="myGifs" class="my-gifs-section">
+        <h2>Mis GIFs</h2>
+        <div id="myGifsContainer" class="my-gifs-grid"></div>
+    </section>
+
+
+
+
+    </main>
+
+
+    <footer>
+    <small>gifOS © - Usa la API de Giphy y RecordRTC By Jordi Prieto</small>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

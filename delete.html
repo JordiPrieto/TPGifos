@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>gifOS - Eliminar Mis GIFs</title>
+    <link rel="stylesheet" href="css/delete.css">
+</head>
+<body>
+    <header>
+    <div class="brand">
+        <h1>gifOS</h1>
+    </div>
+
+    <nav class="nav">
+        <a href="index.html">Inicio</a>
+        <a href="upload.html">Crear GIF</a>
+        <a href="delete.html" class="active">Eliminar GIFs</a>
+        <button id="themeToggle" class="theme-btn">Cambiar tema</button>
+    </nav>
+    </header>
+
+    <main>
+    <section class="delete-section">
+        <h2>Eliminar mis GIFs guardados</h2>
+        <p>En esta página podés borrar tus GIFs subidos (guardados en tu navegador).</p>
+
+        <div id="deleteContainer" class="gif-container"></div>
+
+        <button id="clearAll" class="clear-btn">🧹 Eliminar todos los GIFs</button>
+    </section>
+    </main>
+
+    <footer>
+        <small>gifOS © - Gestión de GIFs guardados By Jordi Prieto</small>
+    </footer>
+
+    <script src="js/delete.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>gifOS - Subir tu GIF</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/RecordRTC/5.6.1/RecordRTC.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+        <rect width="24" height="24" rx="6" fill="var(--accent)"></rect>
+        <text x="6" y="17" fill="white" font-weight="700" font-size="12">GIF</text>
+      </svg>
+      <h1>gifOS</h1>
+    </div>
+
+    <nav class="nav">
+      <a href="index.html">Inicio</a>
+      <a href="upload.html">Crear GIF</a>
+      <button id="themeToggle" class="theme-btn">Cambiar tema</button>
+    </nav>
+  </header>
+
+  <main>
+    <section id="recorder" class="recorder">
+      <div>
+        <video id="preview" autoplay muted playsinline></video>
+
+        <div class="rec-buttons">
+          <button id="startRec">Grabar GIF</button>
+          <button id="stopRec" disabled>Detener</button>
+          <button id="uploadRec" disabled>Subir</button>
+        </div>
+
+        <div class="timer" id="recTimer">00:00</div>
+      </div>
+
+      <div class="rec-info">
+        <h2>Crear tu GIF</h2>
+        <ol>
+          <li>Presiona <b>Grabar GIF</b> para abrir la cámara.</li>
+          <li>Luego <b>Detener</b> para finalizar la grabación.</li>
+          <li>Finalmente <b>Subir</b> para enviarlo a Giphy.</li>
+        </ol>
+        <p id="uploadStatus" class="status"></p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <small>gifOS © - Usa la API de Giphy y RecordRTC</small>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

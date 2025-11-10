@@ -1,0 +1,238 @@
+/* =====================================================
+   gifOS - Estilos corregidos
+   Modo claro (default) y oscuro totalmente funcional
+===================================================== */
+
+/* 🎨 MODO CLARO - por defecto */
+body {
+    --bg: #f6f8fb;
+    --card: #ffffff;
+    --muted: #5b6570;
+    --accent: #6c63ff;
+    --text: #0b1220;
+
+    background: var(--bg);
+    color: var(--text);
+    font-family: Inter, system-ui, Arial, sans-serif;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+/* 🌑 MODO OSCURO */
+body.dark {
+    --bg: #0f1724;
+    --card: #0b1220;
+    --muted: #9aa4b2;
+    --accent: #6c63ff;
+    --text: #e6eef8;
+}
+
+/* =============== ESTRUCTURA ================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.brand {
+    display: flex;
+    gap: .75rem;
+    align-items: center;
+}
+.controls {
+    display: flex;
+    gap: .5rem;
+}
+
+button {
+    padding: .6rem .8rem;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+button:hover {
+    filter: brightness(1.1);
+}
+.theme-btn {
+    background: transparent;
+    border: 1px solid rgba(0,0,0,.15);
+    color: var(--text);
+}
+body.dark .theme-btn {
+    border: 1px solid rgba(255,255,255,.2);
+}
+
+/* =============== MAIN ================= */
+main {
+    max-width: 1100px;
+    margin: 1rem auto;
+    padding: 1rem;
+    margin-left: 2rem;
+}
+
+.search-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem;
+    margin-top: 1rem;
+}
+
+/* =============== GALERÍA ================= */
+.gallery {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    margin-top: 1rem;
+    background: var(--bg); /* 🔹 Fondo cambia con el tema */
+    transition: background 0.4s ease;
+}
+
+.card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: .5rem;
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: background 0.4s ease;
+}
+
+.card img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.card .meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: .8rem;
+    color: var(--muted);
+}
+
+/* =============== RECORDER ================= */
+.recorder {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+video {
+    border-radius: 8px;
+    width: 320px;
+    height: 240px;
+    background: #fff; /* 🔹 blanco por defecto */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+body.dark video {
+    background: #000; /* 🔹 negro solo en modo oscuro */
+}
+.rec-buttons {
+    display: flex;
+    gap: .5rem;
+    margin-top: .5rem;
+}
+.rec-info ol {
+    padding-left: 1.2rem;
+}
+.status {
+    color: var(--muted);
+    margin-top: .5rem;
+}
+
+/* =============== FOOTER ================= */
+footer {
+    text-align: center;
+    color: var(--muted);
+    padding: 1rem;
+    font-size: .85rem;
+}
+
+/* =============== TOAST ================= */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--accent);
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-size: 0.9rem;
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.4s ease, bottom 0.4s ease;
+}
+.toast.show {
+    opacity: 1;
+    bottom: 50px;
+}
+
+
+/* ===== Mis GIFs en cuadrícula ===== */
+
+.my-gifs-section {
+    padding: 2rem;
+}
+
+.my-gifs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1rem;
+    justify-items: center;
+    align-items: start;
+    padding-top: 1rem;
+}
+
+.my-gifs-grid img {
+    width: 75%;
+    max-width: 195px; /* antes 260px ≈ 75% */
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+
+.my-gifs-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.my-gifs-section h2 {
+    text-align: center;
+    font-size: 1.4rem;
+    color: var(--text);
+    margin-bottom: 1rem;
+}
+.my-gifs-grid img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 🔽 Pegá esto justo acá, después de todo */
+@media (max-width: 768px) {
+    .my-gifs-grid img {
+    width: 90%;
+    max-width: 180px;
+    }
+}
+
+    .my-gifs-grid img {
+    width: 70%;
+    max-width: 220px;
+}
+
+
